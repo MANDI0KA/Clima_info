@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima Tomorrow.io</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6e9f0;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border-top: 5px solid #007bff;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .clima-info {
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+
+        .clima-info h2 {
+            color: #007bff;
+            margin-top: 0;
+            font-size: 32px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .clima-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+        
+        .clima-item:last-child {
+            border-bottom: none;
+        }
+
+        .clima-label {
+            color: #555;
+            font-weight: 400;
+        }
+
+        .clima-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .error-message {
+            color: #c0392b; 
+            background-color: #fcecec;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de Clima 🌤️</h1>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Escribe la ciudad (ej. Asunción)" required>
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+        
+        {% if clima_data %}
+            <div class="clima-info">
+                <h2>{{ clima_data.ciudad }}</h2>
+                
+                <div class="clima-item">
+                    <span class="clima-label">Temperatura:</span>
+                    <span class="clima-value">{{ clima_data.temperatura }}°C</span>
+                </div>
+                
+                <div class="clima-item">
+                    <span class="clima-label">Condición:</span>
+                    <span class="clima-value">{{ clima_data.descripcion }}</span>
+                </div>
+                
+                <div class="clima-item">
+                    <span class="clima-label">Humedad:</span>
+                    <span class="clima-value">{{ clima_data.humedad }}%</span>
+                </div>
+                
+                <div class="clima-item">
+                    <span class="clima-label">Viento:</span>
+                    <span class="clima-value">{{ clima_data.viento }} km/h</span>
+                </div>
+            </div>
+            
+        {% endif %}
+    </div>
+</body>
+</html>
